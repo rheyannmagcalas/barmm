@@ -263,7 +263,7 @@ if option == 'Search':
         
         search_keys = list(search_result.keys())
         
-        m = folium.Map(location = [7.6955724,122.0074178],
+        m = folium.Map(location = [barmm_hospitals[current_location][0],barmm_hospitals[current_location][1]],
                        zoom_start=7, 
                        control_scale=True,
                        prefer_canvas=True)
@@ -271,10 +271,27 @@ if option == 'Search':
         nearest_hospitals = []
         nearest_address = []
         nearest_province = []
-        for _search in sorted(search_keys)[0:10]:            
-            folium.Marker(
-                [barmm_hospitals[search_result[_search]][0], barmm_hospitals[search_result[_search]][1]], popup=search_result[_search], tooltip=search_result[_search]
-            ).add_to(m)
+        
+        counter = 0
+        
+        folium.Marker(
+                    [barmm_hospitals[current_location][0], barmm_hospitals[current_location][1]], popup=barmm_hospitals[current_location], 
+            icon=folium.Icon(color='red',icon="hospital-o", prefix='fa'),
+            tooltip=current_location
+        ).add_to(m)
+        
+        for _search in sorted(search_keys)[0:10]:       
+            counter +=1
+            if counter == 1 or counter == 2 or counter == 3:
+                folium.Marker(
+                    [barmm_hospitals[search_result[_search]][0], barmm_hospitals[search_result[_search]][1]], popup=search_result[_search], 
+                    icon=folium.Icon(color='green',icon="hospital-o", prefix='fa'),
+                    tooltip=search_result[_search]
+                ).add_to(m)
+            else:
+                folium.Marker(
+                    [barmm_hospitals[search_result[_search]][0], barmm_hospitals[search_result[_search]][1]], popup=search_result[_search], tooltip=search_result[_search]
+                ).add_to(m)
             
             nearest_hospitals.append(search_result[_search])
             nearest_province.append(barmm_hospitals_details[search_result[_search]]['city'])
